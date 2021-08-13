@@ -1,3 +1,7 @@
+"""
+This model maintain information about products
+"""
+
 from django.db import models
 from users.models import User
 

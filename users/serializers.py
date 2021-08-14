@@ -10,12 +10,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['first_name','middle_name','last_name','email','password','mobile','birth_date']
-
-class PasswordSerializer(serializers.ModelSerializer):
-    confirm_password = serializers.CharField(max_length=128)
-    class Meta:
-        model = User
-        fields = ['password']
+        
 
 class UserDetailSerializer(serializers.ModelSerializer):
     class Meta:

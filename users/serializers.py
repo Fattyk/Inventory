@@ -25,6 +25,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
         
 
 class UserDetailSerializer(serializers.ModelSerializer):
+    products = serializers.PrimaryKeyRelatedField(many=True, queryset=Product.objects.all())
     class Meta:
         model = User
-        fields = ['username', 'first_name','middle_name','last_name','email','mobile','birth_date']
+        fields = ['username', 'first_name','middle_name','last_name','email','mobile','birth_date', 'products']

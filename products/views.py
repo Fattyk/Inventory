@@ -1,19 +1,21 @@
-from users import serializers
 from rest_framework import generics
 from products.models import Product
 from products.serializers import ProductSerializer
 
 # Create your views here.
 
-class CreateListItems(generics.CreateAPIView):
+class CreateListItems(generics.ListCreateAPIView):
     """This create and list all items"""
-    models: Product.objects.all()
+    queryset: Product.objects.all()
     serializer_class: ProductSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
 
 class UserItem(generics.RetrieveUpdateDestroyAPIView):
     """This item can be retrieve, updated and deleted by the owner"""
-    models: Product.objects.all()
+    queryset: Product.objects.all()
     serializer_class: ProductSerializer
 
     def get_queryset(self):
@@ -24,5 +26,5 @@ class UserItem(generics.RetrieveUpdateDestroyAPIView):
 
 class Detail(generics.RetrieveAPIView):
     """This item can be retrieve only"""
-    models: Product.objects.all()
+    queryset: Product.objects.all()
     serializer_class: ProductSerializer

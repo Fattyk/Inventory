@@ -1,6 +1,5 @@
 from django.http import request
 from rest_framework import generics, status
-from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from users.models import User
@@ -14,7 +13,7 @@ from django.utils.decorators import method_decorator
 
 class UsersRegistration(generics.CreateAPIView):
     """Registration of User"""
-    model = User.objects.all()
+    queryset = User.objects.all()
     serializer_class = RegistrationSerializer
 
 

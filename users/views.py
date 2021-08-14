@@ -12,23 +12,11 @@ from django.utils.decorators import method_decorator
 
 # Create your views here.
 
-class UsersRegistration(APIView):
+class UsersRegistration(generics.CreateAPIView):
     """Registration of User"""
+    model = User.objects.all()
+    serializer_class = RegistrationSerializer
 
-    def post(self, request):
-        serializer = RegistrationSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            self.login_user(request)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response({'error':'Invalid Credentials'}, status=status.HTTP_400_BAD_REQUEST)
-
-    def login_user(self, request):
-        username = request.data['username']
-        password = request.data['password']
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
 
 @api_view(['POST'])
 def login_view(request):

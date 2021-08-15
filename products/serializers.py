@@ -10,5 +10,5 @@ class ProductSerializer(serializers.ModelSerializer):
 
 class SearchHistorySerializer(serializers.ModelSerializer):
     class Meta:
-        model = Product
+        model = SearchHistory
         fields = ['history', 'created']

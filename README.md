@@ -205,13 +205,74 @@ Content:
 }
 ```
 
+#### -	search for item
+
+*GET /*
+
+**Description:** List all items and also enable search with 'search' parameter
+**Example:** /?search=apple
+Content:
+
+```json
+[
+    {
+        "name": "Apple",
+        "price": "500.00",
+        "quantity": 6
+    },
+    {
+        "name": "Pineapple",
+        "price": "250.00",
+        "quantity": 8
+    }
+]
+```
+#### -	view search history
+
+*GET /search_history/*
+
+**Description:** List search item history for the authenticated user
+
+Content:
+
+```json
+[
+    {
+        "history": "rad",
+        "created": "2021-08-15"
+    },
+    {
+        "history": "rad",
+        "created": "2021-08-15"
+    },
+    {
+        "history": "2",
+        "created": "2021-08-15"
+    },
+    {
+        "history": "2",
+        "created": "2021-08-15"
+    }
+]
+```
+#### -	set item quantity upon creation
+
+**Description:** Quantity, Price and Name must be supplied during registration
+
+Content:
+
+```json
+{
+    "name": "a",
+    "price": "3.00",
+    "quantity": 5
+}
+```
+
 # I will cover others
 
-#### -	search for item
-#### -	view search history
-#### -	set item quantity upon creation
+
 #### -	add or remove from quantity based on purchase or use
 #### -	view item inventory history
 #### -	can filter items based on quantity
 #### -	can filter item inventory history by date.
-

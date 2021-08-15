@@ -1,22 +1,38 @@
 from rest_framework import generics
-from products.models import Product
-from products.serializers import ProductSerializer
+from products.models import Product, SearchHistory
+from products.serializers import ProductSerializer, SearchHistorySerializer
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.db.models import Q
 
 # Create your views here.
 
+class ItemHistory(generics.ListAPIView):
+    """List search item history"""
+    queryset = SearchHistory.objects.all()
+    serializer_class = SearchHistorySerializer
+
+    def get_queryset(self):
+        """Ensure that history of user are return"""
+        qs = super().get_queryset() 
+        return qs.filter(searcher=self.request.user)
+
+
 class Products(generics.ListAPIView):
     """List all items and enable search with 'search' parameter"""
     serializer_class = ProductSerializer
 
-    def get_queryset(self, request):
+    def get_queryset(self):
         """Queryset to search"""
         query = self.request.GET.get('search')
-        if query:
-            # if request.user.is_authenticated:
 
+        if query:
+            # Capture user search if user is authenticated
+            if self.request.user.is_authenticated:
+                data={'history':query}
+                s = SearchHistorySerializer(data=data)
+                if s.is_valid():
+                    SearchHistory.objects.create(searcher=self.request.user, history=query)
             object_list = Product.objects.filter(
                 Q(name__icontains=query) | Q(price__icontains=query)
             )

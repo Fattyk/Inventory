@@ -36,7 +36,7 @@ Vary: Accept
 
 
 
-#### - 	user must be able to register
+### - 	user must be able to register
 *POST /user/register/*
 **Description:** Registration of User
 Content:
@@ -57,7 +57,7 @@ Suceess: status(ok)
 Wrong input: status (404)
 
 
-#### -	user must be able to update profile
+### -	user must be able to update profile
 *PUT /user/{user_id}/*
 user_id = integer
 **Description:** Update Profile Information of the User and not of others for Data Protection Purpose
@@ -76,7 +76,7 @@ Content:
 ```
 
 
-#### -	user must be able to retrieve his profile information
+### -	user must be able to retrieve his profile information
 *GET /user/{user_id}/*
 user_id = integer
 **Description:** Retrieve Profile Information of the User and not of others
@@ -100,7 +100,7 @@ Sucess: status(ok)
 
 
 
-#### -	user must be able to change password
+### -	user must be able to change password
 *POST /user/change_password/*
 **Description:** Update User's password
 Content:
@@ -116,7 +116,7 @@ Content:
 
 
 
-#### -	user must be able to login
+### -	user must be able to login
 *POST /user/login/*
 **Description:** Verify and login user
 Content:
@@ -130,7 +130,7 @@ Content:
 
 
 
-#### -	user must be able to logout
+### -	user must be able to logout
 *GET /user/logout/*
 **Description:** Logout User
 
@@ -140,7 +140,7 @@ Content:
 ## Core Functionalities: User must be able to 
 
 
-#### -	create item (with unique code)
+### -	create item (with unique code)
 *POST /create/*
 **Description:** This create an item
 Content:
@@ -155,10 +155,8 @@ Content:
 
 
 
-#### -	delete item
+### -	delete item
 *DELETE /myitem/{product_id}/*
-*PUT /myitem/{product_id}/*
-*GET /myitem/{product_id}/*
 product_id = integer
 **Description:** This item can be retrieve, updated and deleted by the owner
 Content:
@@ -173,7 +171,7 @@ Content:
 
 
 
-#### -	View item
+### -	View item
 *GET /{product_id}/*
 product_id = integer
 **Description:** This item can be retrieve only
@@ -189,7 +187,7 @@ Content:
 
 
 
-#### -	search for item
+### -	search for item
 *GET /*
 **Description:** List all items and also enable search with 'search' parameter
 **Example:** /?search=apple
@@ -212,7 +210,7 @@ Content:
 
 
 
-#### -	view search history
+### -	view search history
 *GET /search_history/*
 **Description:** List search item history for the authenticated user
 Content:
@@ -240,7 +238,7 @@ Content:
 
 
 
-#### -	set item quantity upon creation
+### -	set item quantity upon creation
 **Description:** Quantity, Price and Name must be supplied during registration
 Content:
 
@@ -257,7 +255,43 @@ Content:
 # I will cover others
 
 
-#### -	add or remove from quantity based on purchase or use
-#### -	view item inventory history
-#### -	can filter items based on quantity
-#### -	can filter item inventory history by date.
+### -	add or remove from quantity based on purchase or use
+*PUT /myitem/{product_id}/*
+product_id = integer
+**Description:** name, price and quantity of this item can be modified by the owner. This will enable the owner/uer to add or remove quantity as desired.
+Content:
+
+```json
+{
+    "quantity": 15
+}
+```
+
+
+### -	view item inventory history
+
+
+### -	can filter items based on quantity
+*GET /*
+**Description:** List all items and also enable filter with 'quantity' parameter to filter quantity only
+**Example:** /?quantity=3
+Content:
+
+```json
+[
+    {
+        "name": "Mango",
+        "price": "500.00",
+        "quantity": 3
+    },
+    {
+        "name": "Pineapple",
+        "price": "250.00",
+        "quantity": 3
+    }
+]
+```
+
+
+
+### -	can filter item inventory history by date.

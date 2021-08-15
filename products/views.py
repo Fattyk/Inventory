@@ -25,17 +25,28 @@ class Products(generics.ListAPIView):
     def get_queryset(self):
         """Queryset to search"""
         query = self.request.GET.get('search')
+        quantity = self.request.GET.get('quantity')
 
         if query:
-            # Capture user search if user is authenticated
+            # Search for item and capture user search if user is authenticated
             if self.request.user.is_authenticated:
                 data={'history':query}
                 s = SearchHistorySerializer(data=data)
                 if s.is_valid():
                     SearchHistory.objects.create(searcher=self.request.user, history=query)
             object_list = Product.objects.filter(
-                Q(name__icontains=query) | Q(price__icontains=query)
+                Q(name__icontains=query) #| Q(price__icontains=query)
             )
+            return object_list
+
+        elif quantity:
+            # Filter item based on quantity and capture user search if user is authenticated
+            if self.request.user.is_authenticated:
+                data={'history':quantity}
+                s = SearchHistorySerializer(data=data)
+                if s.is_valid():
+                    SearchHistory.objects.create(searcher=self.request.user, history=quantity)
+            object_list = Product.objects.filter(quantity=quantity)
             return object_list
         return Product.objects.all()
 
@@ -53,7 +64,9 @@ class CreateItems(generics.CreateAPIView):
 
 @method_decorator(login_required, name='dispatch')
 class UserItem(generics.RetrieveUpdateDestroyAPIView):
-    """This item can be retrieve, updated and deleted by the owner"""
+    """This item can be retrieve, updated and deleted by the owner
+    name, price and quantity of this item can be modified by the owner
+    """
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 

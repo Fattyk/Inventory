@@ -7,17 +7,8 @@ After installing Django, please run *pip install -r requirements.txt* on your co
 
 **Using the App:**
 
-User must first register
 User must login to access the app
-
-
-### User Management:
-
-
-#### - 	user must be able to register
-*POST /user/register/*
-
-**Description:** Registration of User
+use admin as default username and password
 
 ```json
 HTTP 200 OK
@@ -41,6 +32,15 @@ Vary: Accept
 
 ```
 
+
+### User Management:
+
+
+#### - 	user must be able to register
+*POST /user/register/*
+
+**Description:** Registration of User
+
 Content:
 
 ```json
@@ -58,54 +58,158 @@ Content:
 
 Suceess: status(ok)
 
-```json
-{
-    "username" : "data", 
-    "password" : "data", 
-    "first_name" : "data",
-    "middle_name" : "data",
-    "last_name" : "data",
-    "email" : "data",
-    "password" : "data",
-    "mobile" : "data",
-    "birth_date" : "data"
-}
-
-```
-
 Wrong input: status (404)
-
-```json
-{
-    "error":"Invalid Credentials"
-}
-```
-
 
 
 #### -	user must be able to update profile
-#### -	user must be able to retrieve his profile information
-#### -	user must be able to change password
 
+*PUT /user/{user_id}/*
+user_id = integer
 
-#### -	user must be able to login
-*/user/login*
+**Description:** Update Profile Information of the User and not of others for Data Protection Purpose
+
+Content:
+
 ```json
 {
-    "username" : "",
-    "password" : ""
+    "username": "",
+    "first_name": "",
+    "middle_name": "",
+    "last_name": "",
+    "email": "",
+    "mobile": null,
+    "birth_date": null
+}
+```
+
+#### -	user must be able to retrieve his profile information
+
+*GET /user/{user_id}/*
+
+user_id = integer
+
+**Description:** Retrieve Profile Information of the User and not of others
+
+Content:
+
+```json
+{
+    "username": "",
+    "first_name": "",
+    "middle_name": "",
+    "last_name": "",
+    "email": "",
+    "mobile": null,
+    "birth_date": null,
+    "products": [
+        1
+    ]
+}
+```
+
+Sucess: status(ok)
+
+
+#### -	user must be able to change password
+
+*POST /user/change_password/*
+
+**Description:** Update User's password
+
+Content:
+
+```json
+{
+    "username": "",
+    "password": "",
+    "new_password": "",
+    "confirm_password": ""
 }
 ```
 
 
+#### -	user must be able to login
+
+*POST /user/login/*
+
+**Description:** Verify and login user
+
+Content:
+
+```json
+{
+    "username": "",
+    "password": ""
+}
+```
+
 #### -	user must be able to logout
+
+*GET /user/logout/*
+
+**Description:** Logout User
 
 
 
 ### Core Functionalities: User must be able to 
 
+
 #### -	create item (with unique code)
+
+*POST /*
+*GET /*
+
+**Description:** This create and list all items
+
+Content:
+
+```json
+{
+    "name": "a",
+    "price": "3.00",
+    "quantity": 5
+}
+```
+
 #### -	delete item
+
+*DELETE /myitem/{product_id}/*
+*PUT /myitem/{product_id}/*
+*GET /myitem/{product_id}/*
+
+product_id = integer
+
+**Description:** This item can be retrieve, updated and deleted by the owner
+
+Content:
+
+```json
+{
+    "name": "a",
+    "price": "3.00",
+    "quantity": 5
+}
+```
+
+#### -	View item
+
+*GET /{product_id}/*
+product_id = integer
+
+**Description:** This item can be retrieve only
+
+Content:
+
+```json
+{
+    "name": "a",
+    "price": "3.00",
+    "quantity": 5
+}
+```
+
+# I will cover others
+
 #### -	search for item
 #### -	view search history
 #### -	set item quantity upon creation

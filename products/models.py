@@ -13,7 +13,7 @@ class Product(models.Model):
     name = models.CharField(max_length=150)
     price = models.DecimalField(decimal_places=2, max_digits=10)
     quantity = models.PositiveIntegerField()
-    user = models.ForeignKey(User, verbose_name='user id', on_delete=models.CASCADE, related_name='products')
+    user = models.ForeignKey(User, blank=True, null=True, verbose_name='user id', on_delete=models.CASCADE, related_name='products')
 
     def __str__(self):
         return f"{self.name} {self.price} {self.quantity}"

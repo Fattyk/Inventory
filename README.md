@@ -156,11 +156,8 @@ Content:
 
 #### -	create item (with unique code)
 
-*POST /*
-*GET /*
-
-**Description:** This create and list all items
-
+*POST /create/*
+**Description:** This create an item
 Content:
 
 ```json

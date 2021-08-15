@@ -1,11 +1,33 @@
 from rest_framework import generics
 from products.models import Product
 from products.serializers import ProductSerializer
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from django.db.models import Q
 
 # Create your views here.
 
-class CreateListItems(generics.ListCreateAPIView):
-    """This create and list all items"""
+class Products(generics.ListAPIView):
+    """List all items and enable search with 'search' parameter"""
+    serializer_class = ProductSerializer
+
+    def get_queryset(self, request):
+        """Queryset to search"""
+        query = self.request.GET.get('search')
+        if query:
+            # if request.user.is_authenticated:
+
+            object_list = Product.objects.filter(
+                Q(name__icontains=query) | Q(price__icontains=query)
+            )
+            return object_list
+        return Product.objects.all()
+
+
+
+@method_decorator(login_required, name='dispatch')
+class CreateItems(generics.CreateAPIView):
+    """This create an item"""
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
@@ -13,6 +35,7 @@ class CreateListItems(generics.ListCreateAPIView):
         serializer.save(user=self.request.user)
 
 
+@method_decorator(login_required, name='dispatch')
 class UserItem(generics.RetrieveUpdateDestroyAPIView):
     """This item can be retrieve, updated and deleted by the owner"""
     queryset = Product.objects.all()

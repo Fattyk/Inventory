@@ -104,6 +104,3 @@ def send_email():
         pass
 
 schedule.every().day.at("06:00").do(send_email)
-while True:
-    schedule.run_pending()
-    # time.sleep(1)

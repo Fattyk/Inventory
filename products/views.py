@@ -4,6 +4,9 @@ from products.serializers import ProductSerializer, SearchHistorySerializer
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.db.models import Q
+from django.core.mail import send_mail
+import schedule
+import time
 
 # Create your views here.
 
@@ -80,3 +83,27 @@ class Detail(generics.RetrieveAPIView):
     """This item can be retrieve only"""
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+
+
+def send_email():
+    # search for products less than 10
+    products = Product.objects.filter(quantity__lt=10)
+
+    try:
+        for product in products:
+            send_mail(
+                'Item Low in Quantity',
+                f"""Hi {product.user.username}, \n 
+                Your product with ID {product.id} is less than 10. \n
+                Kindly visit https://fatinventory.herokuapp.com/myitem/{product.id} to update. \n
+                Thanks, \nFatai/""",
+                'ogundele.fatai.k@gmail.com',
+                [product.user.email]
+            )
+    except:
+        pass
+
+schedule.every().day.at("06:00").do(send_email)
+while True:
+    schedule.run_pending()
+    time.sleep(1)

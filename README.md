@@ -1,8 +1,8 @@
 # Inventory Documentation
-
+link: https://fatinventory.herokuapp.com
 
 ### Requirements:
-After installing Django, please run *pip install -r requirements.txt* on your command line to install rest_framework.
+After installing Django, please run *pip install -r requirements.txt* on your command line to install necessary dependencies.
 
 
 

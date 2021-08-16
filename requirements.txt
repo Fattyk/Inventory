@@ -1,4 +1,3 @@
 django
-rest_framework
-gunicorn
+djangorestframework
 django-heroku

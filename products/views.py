@@ -5,10 +5,11 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.db.models import Q
 from django.core.mail import send_mail
+import asyncio
 import schedule
-import time
 
 # Create your views here.
+
 
 class ItemHistory(generics.ListAPIView):
     """List search item history"""
@@ -17,7 +18,7 @@ class ItemHistory(generics.ListAPIView):
 
     def get_queryset(self):
         """Ensure that history of user are return"""
-        qs = super().get_queryset() 
+        qs = super().get_queryset()
         return qs.filter(searcher=self.request.user)
 
 
@@ -33,26 +34,27 @@ class Products(generics.ListAPIView):
         if query:
             # Search for item and capture user search if user is authenticated
             if self.request.user.is_authenticated:
-                data={'history':query}
+                data = {'history': query}
                 s = SearchHistorySerializer(data=data)
                 if s.is_valid():
-                    SearchHistory.objects.create(searcher=self.request.user, history=query)
+                    SearchHistory.objects.create(
+                        searcher=self.request.user, history=query)
             object_list = Product.objects.filter(
-                Q(name__icontains=query) #| Q(price__icontains=query)
+                Q(name__icontains=query)  # | Q(price__icontains=query)
             )
             return object_list
 
         elif quantity:
             # Filter item based on quantity and capture user search if user is authenticated
             if self.request.user.is_authenticated:
-                data={'history':quantity}
+                data = {'history': quantity}
                 s = SearchHistorySerializer(data=data)
                 if s.is_valid():
-                    SearchHistory.objects.create(searcher=self.request.user, history=quantity)
+                    SearchHistory.objects.create(
+                        searcher=self.request.user, history=quantity)
             object_list = Product.objects.filter(quantity=quantity)
             return object_list
         return Product.objects.all()
-
 
 
 @method_decorator(login_required, name='dispatch')
@@ -75,7 +77,7 @@ class UserItem(generics.RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         """Ensure that user cannot get, edit or delete other users' item"""
-        qs = super().get_queryset() 
+        qs = super().get_queryset()
         return qs.filter(user=self.request.user)
 
 
@@ -103,4 +105,11 @@ def send_email():
     except:
         pass
 
+
 schedule.every().day.at("06:00").do(send_email)
+async def run_mail():    
+    while True:
+        schedule.run_pending()
+#         await asyncio.sleep(1)
+
+task = asyncio.create_task(run_mail())

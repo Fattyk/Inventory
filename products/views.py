@@ -107,9 +107,11 @@ def send_email():
 
 
 schedule.every().day.at("06:00").do(send_email)
-async def run_mail():    
-    while True:
-        schedule.run_pending()
+
+
+# async def mailing():    
+#     while True:
+#         schedule.run_pending()
 #         await asyncio.sleep(1)
 
-task = asyncio.create_task(run_mail())
+# task = asyncio.create_task(mailing())
